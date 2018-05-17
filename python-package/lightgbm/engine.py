@@ -40,7 +40,9 @@ def train(params, train_set, num_boost_round=100,
         Customized objective function.
     feval : callable or None, optional (default=None)
         Customized evaluation function.
+        Should accept two parameters: preds, train_data.
         Note: should return (eval_name, eval_result, is_higher_better) or list of such tuples.
+        To ignore the default metric in params, set it to the string ``"None"``
     init_model : string or None, optional (default=None)
         Filename of LightGBM model or Booster instance used for continue training.
     feature_name : list of strings or 'auto', optional (default="auto")
@@ -204,7 +206,8 @@ def train(params, train_set, num_boost_round=100,
         # check evaluation result.
         if valid_sets is not None:
             if is_valid_contain_train:
-                evaluation_result_list.extend(booster.eval_train(feval))
+                evaluation_result_list.extend(booster.eval_train(
+                ))
             evaluation_result_list.extend(booster.eval_valid(feval))
         try:
             for cb in callbacks_after_iter:
